@@ -1,12 +1,14 @@
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from advertisements.filters import AdvertisementFilter
-from advertisements.models import Advertisement
-from advertisements.serializers import AdvertisementSerializer
+from .filters import AdvertisementFilter
+from .models import Advertisement
+from .serializers import AdvertisementSerializer
 
-from advertisements.permissions import IsOwnerOrReadOnly
+from .permissions import IsOwnerOrReadOnly
 
 
 class AdvertisementViewSet(ModelViewSet):
@@ -15,8 +17,11 @@ class AdvertisementViewSet(ModelViewSet):
     serializer_class = AdvertisementSerializer
     permission_classes = [IsOwnerOrReadOnly]
 
-    # filter_backends = [DjangoFilterBackend]
-    # filterset_fields = ['created_at']
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['creator', 'status']
+
+    # search_fields = ['status', 'title']
+    # ordering_fields = ['id', 'username', 'creator', 'status', 'created_at']
 
     # TODO: настройте ViewSet, укажите атрибуты для кверисета,
     #   сериализаторов и фильтров
